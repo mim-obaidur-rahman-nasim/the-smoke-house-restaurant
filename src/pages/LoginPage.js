@@ -1,16 +1,61 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import FooterPage from '../components/Footer/FooterPage';
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import FooterPage from "../components/Footer/FooterPage";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated, login } = useAuth();
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location.state]);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [pageLoading, setPageLoading] = useState(false);
+  const [pageError, setPageError] = useState("");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Call API or perform login logic here
-    console.log('Login form submitted:', { email, password, remember });
+
+    if (password.length < 6) {
+      setPageError("Invalid password");
+      return;
+    }
+
+    const data = {
+      email,
+      password,
+    };
+    try {
+      setPageLoading(true);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/user/login`,
+        data
+      );
+
+      const token = response?.data?.token;
+
+      console.log("LOGIN: ", token);
+      await login(token);
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+
+      toast.success(response?.data?.message || "Login successfully");
+    } catch (error) {
+      setPageError(error?.response?.data?.message || "Server error");
+    } finally {
+      setPageLoading(false);
+    }
   };
 
   return (
@@ -21,9 +66,16 @@ export const LoginPage = () => {
             <h1 className="text-xl font-bold text-center leading-tight tracking-tight  md:text-2xl">
               Sign in to your account
             </h1>
-            <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4 md:space-y-6"
+              action="#"
+            >
               <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Your email
                 </label>
                 <input
@@ -38,7 +90,10 @@ export const LoginPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Password
                 </label>
                 <input
@@ -52,33 +107,26 @@ export const LoginPage = () => {
                   required
                 />
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      aria-describedby="remember"
-                      type="checkbox"
-                      checked={remember}
-                      onChange={(event) => setRemember(event.target.checked)}
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800 text-black"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label htmlFor="remember" className="text-gray-500 dark:text-black">
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-                <Link to="/" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
-                  Forgot password?
-                </Link>
-              </div>
-              <button type="submit" className="w-full text-white bg-[#AD343E] hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                Sign in
+
+              <label className="mb-2 text-sm font-medium text-red-600 dark:text-white">
+                {pageError}
+              </label>
+
+              <button
+                type="submit"
+                className="w-full text-white bg-[#AD343E] hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                disabled={pageLoading}
+              >
+                {pageLoading ? "Loading" : "Sign in"}
               </button>
               <p className="text-sm font-light text-black">
-                Don’t have an account yet? <Link to="/SignUp" className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer">Sign up</Link>
+                Don’t have an account yet?{" "}
+                <Link
+                  to="/SignUp"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500 cursor-pointer"
+                >
+                  Sign up
+                </Link>
               </p>
             </form>
           </div>

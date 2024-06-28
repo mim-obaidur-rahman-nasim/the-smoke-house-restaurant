@@ -1,16 +1,68 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import FooterPage from '../components/Footer/FooterPage';
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import FooterPage from "../components/Footer/FooterPage";
+import axios from "axios";
+import useAuth from "../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated, login } = useAuth();
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    if (isAuthenticated) {
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, location.state]);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [pageLoading, setPageLoading] = useState(false);
+  const [pageError, setPageError] = useState("");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Sign up form submitted:', { name, email, password, confirmPassword });
+
+    if (password.length < 6) {
+      setPageError("Password should be at least 6 characted long");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setPageError("Both password should be matched");
+      return;
+    }
+
+    const data = {
+      name,
+      email,
+      password,
+    };
+    try {
+      setPageLoading(true);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER}/api/user/register`,
+        data
+      );
+
+      const token = response?.data?.token;
+
+      await login(token);
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+
+      toast.success(response?.data?.message || "Account created successfully");
+    } catch (error) {
+      setPageError(error?.response?.data?.message || "Server error");
+    } finally {
+      setPageLoading(false);
+    }
   };
 
   return (
@@ -23,7 +75,10 @@ const SignUpPage = () => {
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div>
-                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Your name
                 </label>
                 <input
@@ -38,7 +93,10 @@ const SignUpPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Your email
                 </label>
                 <input
@@ -53,7 +111,10 @@ const SignUpPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Password
                 </label>
                 <input
@@ -68,7 +129,10 @@ const SignUpPage = () => {
                 />
               </div>
               <div>
-                <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Confirm password
                 </label>
                 <input
@@ -82,14 +146,26 @@ const SignUpPage = () => {
                   required
                 />
               </div>
+
+              <label className="mb-2 text-sm font-medium text-red-600 dark:text-white">
+                {pageError}
+              </label>
+
               <button
                 type="submit"
                 className="w-full text-white bg-[#AD343E] hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center  "
+                disabled={pageLoading}
               >
-                Sign up
+                {pageLoading ? "Loading..." : "Sign up"}
               </button>
               <p className="text-sm font-light text-black">
-                Already have an account? <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Log in</Link>
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  Log in
+                </Link>
               </p>
             </form>
           </div>
