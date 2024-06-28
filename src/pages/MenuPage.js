@@ -87,7 +87,7 @@ const MenuPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center pt-8 px-10">
+      <div className="flex flex-col min-h-screen justify-center items-center pt-8 px-10">
         <div>
           <h1 className="font-medium text-[100px] text-center">Our Menu</h1>
           <p>
