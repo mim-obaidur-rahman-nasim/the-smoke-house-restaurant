@@ -62,23 +62,23 @@ function HomePage() {
           </div>
         </div>
       </div>
-      <div className=" flex flex-col justify-center items-center py-10">
-        <h1 className=" font-medium text-5xl text-center">Browse Our Menu</h1>
-        <div className="flex text-center px-2 md:px-10 lg:px-20 gap-5 pt-10">
-          {menuItems.map((menuItem, index) => (
-            <div key={index} className="flex flex-col px-10 py-8 justify-center items-center border rounded-2xl">
-              <img src={menuItem.image} />
-              <h2 className=" text-lg font-semibold pt-[30px] pb-[15px]">
-                {menuItem.title}
-              </h2>
-              <p>{menuItem.description}</p>
-              <button className="text-[#AD343E] font-bold pt-[30px] cursor-pointer">
-                Explore Menu
-              </button>
-            </div>
-          ))}
-        </div>
+      <div className="flex flex-col justify-center items-center py-10 md:py-20 lg:py-30">
+  <h1 className="font-medium text-5xl text-center md:text-6xl lg:text-7xl">Browse Our Menu</h1>
+  <div className="flex flex-wrap justify-center items-center px-2 md:px-10 lg:px-20 gap-5 pt-10">
+    {menuItems.map((menuItem, index) => (
+      <div key={index} className="flex flex-col px-10 py-8 justify-center items-center border rounded-2xl w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
+        <img src={menuItem.image} className="w-full h-full object-cover rounded-t-2xl" />
+        <h2 className="text-lg font-semibold pt-5 pb-3 md:pt-10 md:pb-5">
+          {menuItem.title}
+        </h2>
+        <p className="text-sm md:text-base">{menuItem.description}</p>
+        <button className="text-[#AD343E] font-bold pt-5 cursor-pointer">
+          Explore Menu
+        </button>
       </div>
+    ))}
+  </div>
+</div>
       <div className="flex justify-center items-center p-8">
         <img src={content}></img>
       </div>
@@ -86,5 +86,7 @@ function HomePage() {
     </div>
   );
 }
+
+
 
 export default HomePage;

@@ -52,7 +52,7 @@ const CalendarPage = () => {
 
   return (
     <div>
-<div className="flex flex-col justify-center items-center pt-8 px-10 py-20">
+<div className="flex flex-col justify-center items-center min-h-screen pt-8 px-10 py-20">
       <div className="w-full max-w-md">
         <table className="w-full text-center">
           <thead>

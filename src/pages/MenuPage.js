@@ -87,7 +87,7 @@ const MenuPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col justify-center items-center pt-8 px-10">
+      <div className="flex flex-col min-h-screen justify-center items-center pt-8 px-10">
         <div>
           <h1 className="font-medium text-[100px] text-center">Our Menu</h1>
           <p>
@@ -95,58 +95,58 @@ const MenuPage = () => {
             need to change to create a truly happens.
           </p>
         </div>
-        <div className="flex gap-4 pt-5">
-          <button
-            className={`px-4 py-2 border rounded-full ${
-              selectedCategory === "All"
-                ? "bg-[#AD343E] text-white"
-                : "bg-white text-[#AD343E]"
-            }`}
-            onClick={() => handleCategoryClick("All")}
-          >
-            All
-          </button>
-          <button
-            className={`px-4 py-2 border rounded-full ${
-              selectedCategory === "Breakfast"
-                ? "bg-[#AD343E] text-white"
-                : "bg-white text-[#AD343E]"
-            }`}
-            onClick={() => handleCategoryClick("Breakfast")}
-          >
-            Breakfast
-          </button>
-          <button
-            className={`px-4 py-2 border rounded-full ${
-              selectedCategory === "Main Dishes"
-                ? "bg-[#AD343E] text-white"
-                : "bg-white text-[#AD343E]"
-            }`}
-            onClick={() => handleCategoryClick("Main Dishes")}
-          >
-            Main Dishes
-          </button>
-          <button
-            className={`px-4 py-2 border rounded-full ${
-              selectedCategory === "Drinks"
-                ? "bg-[#AD343E] text-white"
-                : "bg-white text-[#AD343E]"
-            }`}
-            onClick={() => handleCategoryClick("Drinks")}
-          >
-            Drinks
-          </button>
-          <button
-            className={`px-4 py-2 border rounded-full ${
-              selectedCategory === "Desserts"
-                ? "bg-[#AD343E] text-white"
-                : "bg-white text-[#AD343E]"
-            }`}
-            onClick={() => handleCategoryClick("Desserts")}
-          >
-            Desserts
-          </button>
-        </div>
+        <div class="flex flex-wrap justify-center pt-5 gap-4">
+  <button
+    class={`px-4 py-2 border rounded-full ${
+      selectedCategory === "All"
+        ? "bg-[#AD343E] text-white"
+        : "bg-white text-[#AD343E]"
+    } sm:w-1/2 md:w-auto lg:mx-4`}
+    onClick={() => handleCategoryClick("All")}
+  >
+    All
+  </button>
+  <button
+    class={`px-4 py-2 border rounded-full ${
+      selectedCategory === "Breakfast"
+        ? "bg-[#AD343E] text-white"
+        : "bg-white text-[#AD343E]"
+    } sm:w-1/2 md:w-auto lg:mx-4`}
+    onClick={() => handleCategoryClick("Breakfast")}
+  >
+    Breakfast
+  </button>
+  <button
+    class={`px-4 py-2 border rounded-full ${
+      selectedCategory === "Main Dishes"
+        ? "bg-[#AD343E] text-white"
+        : "bg-white text-[#AD343E]"
+    } sm:w-1/2 md:w-auto lg:mx-4`}
+    onClick={() => handleCategoryClick("Main Dishes")}
+  >
+    Main Dishes
+  </button>
+  <button
+    class={`px-4 py-2 border rounded-full ${
+      selectedCategory === "Drinks"
+        ? "bg-[#AD343E] text-white"
+        : "bg-white text-[#AD343E]"
+    } sm:w-1/2 md:w-auto lg:mx-4`}
+    onClick={() => handleCategoryClick("Drinks")}
+  >
+    Drinks
+  </button>
+  <button
+    class={`px-4 py-2 border rounded-full ${
+      selectedCategory === "Desserts"
+        ? "bg-[#AD343E] text-white"
+        : "bg-white text-[#AD343E]"
+    } sm:w-1/2 md:w-auto lg:mx-4`}
+    onClick={() => handleCategoryClick("Desserts")}
+  >
+    Desserts
+  </button>
+</div>
         <div className="flex flex-wrap justify-center pt-10 pb-10">
           {filteredMenuItems.map((item) => (
             <div
