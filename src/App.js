@@ -9,6 +9,7 @@ import CalendarPage from './pages/CalendarPage';
 import LoginPage from './pages/LoginPage';
 import NavBar from './components/NavBar/NavBar';
 import FooterPage from './components/Footer/FooterPage';
+import SignUpPage from './pages/SignUpPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/footer" element={<FooterPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </Router>
   );
