@@ -45,7 +45,6 @@ export const LoginPage = () => {
 
       const token = response?.data?.token;
 
-      console.log("LOGIN: ", token);
       await login(token);
       const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });
