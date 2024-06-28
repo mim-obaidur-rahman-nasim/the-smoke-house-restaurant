@@ -4,9 +4,8 @@ import logo from "../../assets/images/logo.svg";
 import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
-  const { role } = useAuth();
+  const { isAuthenticated, role, logout } = useAuth();
 
-  console.log("ROLE", role);
   return (
     <nav className="flex justify-between w-full bg-[#F9F9F7] items-center py-4 px-8">
       <div className="flex items-center">
@@ -40,15 +39,23 @@ const Navbar = () => {
             Calendar
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/login"
-            activeClassName="active"
-            className="nav-link cursor-pointer"
-          >
-            Log In
-          </NavLink>
-        </li>
+        {isAuthenticated ? (
+          <li>
+            <button onClick={logout} className="nav-link cursor-pointer">
+              Log out
+            </button>
+          </li>
+        ) : (
+          <li>
+            <NavLink
+              to="/login"
+              activeClassName="active"
+              className="nav-link cursor-pointer"
+            >
+              Log In
+            </NavLink>
+          </li>
+        )}
       </ul>
       <NavLink
         to="/book-now"
