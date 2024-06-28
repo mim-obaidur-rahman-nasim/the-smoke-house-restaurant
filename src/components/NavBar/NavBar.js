@@ -4,7 +4,7 @@ import logo from '../../assets/images/logo.svg';
 
 const Navbar = () => {
   return (
-    <nav className="flex justify-between w-full bg-[#DBDFD0] items-center py-4 px-8">
+    <nav className="flex justify-between w-full bg-[#F9F9F7] items-center py-4 px-8">
       <div className="flex items-center">
         <img src={logo} alt="Smoke House Restaurant Logo" className=" w-40" />
       </div>
@@ -30,9 +30,9 @@ const Navbar = () => {
           </NavLink>
         </li>
       </ul>
-          <button to="/book-now" activeClassName="active" className="nav-link cursor-pointer text-[#925036] bg-white outline-1 px-4 py-2 rounded-full font-semibold border border-black">
+          <NavLink to="/book-now" activeClassName="active" className="nav-link cursor-pointer text-[#925036] bg-white outline-1 px-4 py-2 rounded-full font-semibold border border-black">
             Book Now
-          </button>
+          </NavLink>
     </nav>
   );
 };
