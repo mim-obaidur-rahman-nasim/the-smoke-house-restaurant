@@ -12,6 +12,8 @@ import Menu from "../pages/dashboard/Menu";
 import AddMenu from "../pages/dashboard/AddMenu";
 import Category from "../pages/dashboard/Category";
 import AddCategory from "../pages/dashboard/AddCategory";
+import UpdateCategory from "../pages/dashboard/UpdateCategory";
+import UpdateMenu from "../pages/dashboard/UpdateMenu";
 
 export const router = createBrowserRouter([
   {
@@ -63,12 +65,20 @@ export const router = createBrowserRouter([
         element: <AddMenu />,
       },
       {
+        path: "menu/:id",
+        element: <UpdateMenu />,
+      },
+      {
         path: "categories",
         element: <Category />,
       },
       {
         path: "add-category",
         element: <AddCategory />,
+      },
+      {
+        path: "categories/:id",
+        element: <UpdateCategory />,
       },
     ],
   },
