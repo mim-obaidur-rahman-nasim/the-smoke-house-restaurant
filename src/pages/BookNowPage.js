@@ -6,7 +6,7 @@ import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { subDays, addDays } from "date-fns";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // Import DatePicker CSS
+import "react-datepicker/dist/react-datepicker.css";
 
 export const BookNowPage = () => {
   const navigate = useNavigate();

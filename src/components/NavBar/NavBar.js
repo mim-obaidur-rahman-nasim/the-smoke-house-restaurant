@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/images/logo.svg";
 import useAuth from "../../hooks/useAuth";
 
@@ -10,7 +10,13 @@ const Navbar = () => {
   return (
     <nav className="flex justify-between w-full bg-[#F9F9F7] items-center py-4 px-8 md:px-12 lg:px-16 xl:px-20 md:mr-4 lg:mr-6 xl:mr-8">
       <div className="flex items-center">
-        <img src={logo} alt="Smoke House Restaurant Logo" className="w-40 md:w-48 lg:w-56 xl:w-64" />
+        <Link to="/">
+          <img
+            src={logo}
+            alt="Smoke House Restaurant Logo"
+            className="w-40 md:w-48 lg:w-56 xl:w-64"
+          />
+        </Link>
       </div>
       <ul className="md:flex hidden justify-between items-center gap-12 text-[#925036] font-semibold">
         <li>
@@ -31,16 +37,18 @@ const Navbar = () => {
             Offers
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            to="/calendar"
-            activeClassName="active"
-            className="nav-link cursor-pointer"
-          >
-            Calendar
-          </NavLink>
-        </li>
-        {isAuthenticated? (
+        {role === "MANAGER" && (
+          <li>
+            <NavLink
+              to="/dashboard"
+              activeClassName="active"
+              className="nav-link cursor-pointer"
+            >
+              Dashboard
+            </NavLink>
+          </li>
+        )}
+        {isAuthenticated ? (
           <li>
             <button onClick={logout} className="nav-link cursor-pointer">
               Log out
