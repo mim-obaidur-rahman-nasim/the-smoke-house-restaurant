@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import FooterPage from "../components/Footer/FooterPage";
+
 
 const MenuPage = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -87,9 +87,9 @@ const MenuPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col min-h-screen justify-center items-center pt-8 px-10">
+      <div className="flex flex-col min-h-screen justify-center text-center items-center pt-8 px-10">
         <div>
-          <h1 className="font-medium text-[100px] text-center">Our Menu</h1>
+          <h1 className="font-medium text-4xl lg:text-[100px] text-center pb-8">Our Menu</h1>
           <p>
             We consider all the drivers of change gives you the components you
             need to change to create a truly happens.
@@ -152,7 +152,7 @@ const MenuPage = () => {
             <div
               key={item.id}
               style={{ margin: "20px" }}
-              className="w-1/2 md:w-1/3 xl:w-1/4 p-4 border text-center"
+              className="w-1/2 md:w-1/3 xl:w-1/4 p-4 border rounded-lg text-center"
             >
               <img
                 src={item.image}
@@ -166,7 +166,6 @@ const MenuPage = () => {
           ))}
         </div>
       </div>
-      <FooterPage />
     </div>
   );
 };

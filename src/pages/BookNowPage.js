@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import FooterPage from "../components/Footer/FooterPage";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
@@ -197,7 +196,6 @@ export const BookNowPage = () => {
           </div>
         </div>
       </div>
-      <FooterPage />
     </div>
   );
 };
