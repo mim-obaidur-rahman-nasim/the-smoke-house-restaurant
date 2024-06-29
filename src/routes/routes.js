@@ -14,6 +14,8 @@ import Category from "../pages/dashboard/Category";
 import AddCategory from "../pages/dashboard/AddCategory";
 import UpdateCategory from "../pages/dashboard/UpdateCategory";
 import UpdateMenu from "../pages/dashboard/UpdateMenu";
+import AllReservation from "../pages/dashboard/AllReservation";
+import UpcomingReservation from "../pages/dashboard/UpcomingReservation";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +81,14 @@ export const router = createBrowserRouter([
       {
         path: "categories/:id",
         element: <UpdateCategory />,
+      },
+      {
+        path: "all-reservation",
+        element: <AllReservation />,
+      },
+      {
+        path: "upcoming-reservation",
+        element: <UpcomingReservation />,
       },
     ],
   },

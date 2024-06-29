@@ -1,15 +1,14 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
-  //   const [signOut] = useSignOut(auth);
+  const { logout } = useAuth();
 
-  //   const handleLogOut = async () => {
-  //     const success = await signOut();
-  //     if (success) {
-  //       navigate("/", { replace: true });
-  //     }
-  //   };
+  const handleLogOut = async () => {
+    await logout();
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className="drawer drawer-mobile lg:drawer-open">
@@ -29,7 +28,7 @@ const DashboardLayout = () => {
 
       <div className="drawer-side">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-        <ul className="menu w-40 bg-white text-base-content h-screen flex justify-between py-12">
+        <ul className="menu w-68 bg-white text-base-content h-screen flex justify-between py-12">
           <div>
             <li>
               <Link to={"/"}>Home</Link>
@@ -46,10 +45,19 @@ const DashboardLayout = () => {
             <li>
               <Link to="add-category">Add Category</Link>
             </li>
+            <li>
+              <Link to="all-reservation">All Reservation</Link>
+            </li>
+            <li>
+              <Link to="upcoming-reservation">Upcoming Reservation</Link>
+            </li>
           </div>
           <div>
             <li>
-              <button className="btn bg-red-600 btn-sm text-white hover:bg-red-700">
+              <button
+                onClick={handleLogOut}
+                className="btn bg-red-600 btn-sm text-white hover:bg-red-700"
+              >
                 Logout
               </button>
             </li>

@@ -66,70 +66,74 @@ const MenuPage = () => {
   }
 
   return (
-    <div>
-      <div className="flex flex-col min-h-screen justify-center items-center pt-8 px-10">
-        <div>
-          <h1 className="font-medium text-[100px] text-center">Our Menu</h1>
-          <p>
-            We consider all the drivers of change gives you the components you
-            need to change to create a truly happens.
-          </p>
-        </div>
-        <div className="flex flex-wrap justify-center pt-5 gap-4">
-          <button
-            onClick={() => setSelectedCategory("All")}
-            className={`px-4 py-2 border rounded-full ${
-              selectedCategory === "All"
-                ? "bg-[#AD343E] text-white"
-                : "bg-white text-[#AD343E]"
-            }  sm:w-1/2 md:w-auto lg:mx-4`}
-          >
-            All
-          </button>
-          {categories?.map((data) => {
-            const { _id, categoryName } = data;
-            return (
-              <button
-                key={_id}
-                onClick={() => setSelectedCategory(categoryName)}
-                className={`px-4 py-2 border rounded-full ${
-                  selectedCategory === categoryName
-                    ? "bg-[#AD343E] text-white"
-                    : "bg-white text-[#AD343E]"
-                }  sm:w-1/2 md:w-auto lg:mx-4`}
-              >
-                {categoryName}
-              </button>
-            );
-          })}
-        </div>
-        <div className="flex flex-wrap justify-center pt-10 pb-10">
-          {menuToShow?.map((data) => {
-            const { _id, foodName, price, categoryName, imageURL } = data;
-            return (
-              <div
-                key={_id}
-                style={{ margin: "20px" }}
-                className="w-1/2 md:w-1/3 xl:w-1/4 p-4 border text-center"
-              >
+    <div className="min-h-screen container mx-auto pt-6 pb-12">
+      <div className="flex flex-col justify-center items-center gap-4">
+        <h1 className="font-bold text-4xl text-center ">Our Menu</h1>
+        <p className="text-gray-500 text-sm px-12">
+          We consider all the drivers of change gives you the components you
+          need to change to create a truly happens.
+        </p>
+      </div>
+      <div className="flex justify-center pt-5 gap-1 overflow-x-scroll text-sm">
+        <button
+          onClick={() => setSelectedCategory("All")}
+          className={`px-4 py-2 border rounded-full ${
+            selectedCategory === "All"
+              ? "bg-[#AD343E] text-white"
+              : "bg-white text-[#AD343E]"
+          } sm:w-1/2 md:w-auto lg:mx-4`}
+        >
+          All
+        </button>
+        {categories?.map((data) => {
+          const { _id, categoryName } = data;
+          return (
+            <button
+              key={_id}
+              onClick={() => setSelectedCategory(categoryName)}
+              className={`px-4 py-2 border rounded-full ${
+                selectedCategory === categoryName
+                  ? "bg-[#AD343E] text-white"
+                  : "bg-white text-[#AD343E]"
+              } sm:w-1/2 md:w-auto lg:mx-4`}
+            >
+              {categoryName}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 px-4">
+        {menuToShow?.map((data) => {
+          const { _id, foodName, price, categoryName, imageURL } = data;
+          return (
+            <div
+              key={_id}
+              className="border border-gray-300 rounded-2xl flex flex-col"
+            >
+              <div className="relative h-0" style={{ paddingTop: "133.33%" }}>
                 <img
                   src={imageURL}
                   alt={foodName}
-                  className="w-full h-auto mb-4"
+                  className="absolute inset-0 w-full h-full object-cover rounded-t-2xl"
                 />
-                <h2 className="text-lg">{foodName}</h2>
-                <p>Category: {categoryName}</p>
-                <p>Price: bdt {price}</p>
               </div>
-            );
-          })}
-
-          {menuToShow.length < 1 && (
-            <p>No {selectedCategory} food is available now</p>
-          )}
-        </div>
+              <div className="px-4 py-4">
+                <h2 className="text-xl font-bold">{foodName}</h2>
+                <p className="text-sm -tracking-wider">{categoryName}</p>
+                <p className="mt-2">
+                  <span className="font-bold text-sm">Price:</span> bdt {price}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
-      <FooterPage />
+      {menuToShow.length < 1 && (
+        <div className="text-center">
+          <p>No {selectedCategory} food is available now</p>
+        </div>
+      )}
     </div>
   );
 };
