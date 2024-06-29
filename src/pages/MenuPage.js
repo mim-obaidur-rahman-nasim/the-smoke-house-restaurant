@@ -1,89 +1,69 @@
 import React, { useState, useEffect } from "react";
 import FooterPage from "../components/Footer/FooterPage";
+import axios from "axios";
+import Loading from "./shared/Loading";
+import Error from "./shared/Error";
 
 const MenuPage = () => {
-  const [menuItems, setMenuItems] = useState([]);
+  const [menu, setMenu] = useState([]);
+  const [menuToShow, setMenuToShow] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [pageError, setPageError] = useState("");
+
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    const mockData = [
-      {
-        id: 1,
-        name: "Pancakes",
-        category: "Breakfast",
-        price: 9.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 2,
-        name: "Burger",
-        category: "Main Dishes",
-        price: 12.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 3,
-        name: "Coke",
-        category: "Drinks",
-        price: 2.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 4,
-        name: "Cheesecake",
-        category: "Desserts",
-        price: 6.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 5,
-        name: "Coffee",
-        category: "Drinks",
-        price: 3.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 6,
-        name: "Scrambled Eggs",
-        category: "Breakfast",
-        price: 8.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 7,
-        name: "Salad",
-        category: "Main Dishes",
-        price: 11.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 8,
-        name: "Ice Cream",
-        category: "Desserts",
-        price: 5.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-    ];
+    const fetchMenu = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/menu/all`
+        );
+        setMenu(response?.data?.data);
+        setMenuToShow(response?.data?.data);
+      } catch (error) {
+        setPageError(error?.response?.data?.message || "Server error");
+      } finally {
+        setPageLoading(false);
+      }
+    };
 
-    setMenuItems(mockData);
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/category/all`
+        );
+        setCategories(response?.data?.data);
+      } catch (error) {
+        setPageError(error?.response?.data?.message || "Server error");
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    fetchMenu();
+
+    fetchCategories();
   }, []);
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-  };
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setMenuToShow(menu);
+    } else {
+      const filterResult = menu.filter(
+        (data) => data.categoryName === selectedCategory
+      );
+      setMenuToShow(filterResult);
+    }
+  }, [selectedCategory, menu]);
 
-  const filteredMenuItems =
-    selectedCategory === "All"
-      ? menuItems
-      : menuItems.filter((item) => item.category === selectedCategory);
+  if (pageLoading) {
+    return <Loading />;
+  }
+
+  if (!pageLoading && menu.length < 1) {
+    return <Error message="No menu found" />;
+  }
 
   return (
     <div>
@@ -95,75 +75,58 @@ const MenuPage = () => {
             need to change to create a truly happens.
           </p>
         </div>
-        <div class="flex flex-wrap justify-center pt-5 gap-4">
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "All"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("All")}
-  >
-    All
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Breakfast"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Breakfast")}
-  >
-    Breakfast
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Main Dishes"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Main Dishes")}
-  >
-    Main Dishes
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Drinks"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Drinks")}
-  >
-    Drinks
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Desserts"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Desserts")}
-  >
-    Desserts
-  </button>
-</div>
+        <div className="flex flex-wrap justify-center pt-5 gap-4">
+          <button
+            onClick={() => setSelectedCategory("All")}
+            className={`px-4 py-2 border rounded-full ${
+              selectedCategory === "All"
+                ? "bg-[#AD343E] text-white"
+                : "bg-white text-[#AD343E]"
+            }  sm:w-1/2 md:w-auto lg:mx-4`}
+          >
+            All
+          </button>
+          {categories?.map((data) => {
+            const { _id, categoryName } = data;
+            return (
+              <button
+                key={_id}
+                onClick={() => setSelectedCategory(categoryName)}
+                className={`px-4 py-2 border rounded-full ${
+                  selectedCategory === categoryName
+                    ? "bg-[#AD343E] text-white"
+                    : "bg-white text-[#AD343E]"
+                }  sm:w-1/2 md:w-auto lg:mx-4`}
+              >
+                {categoryName}
+              </button>
+            );
+          })}
+        </div>
         <div className="flex flex-wrap justify-center pt-10 pb-10">
-          {filteredMenuItems.map((item) => (
-            <div
-              key={item.id}
-              style={{ margin: "20px" }}
-              className="w-1/2 md:w-1/3 xl:w-1/4 p-4 border text-center"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-auto mb-4"
-              />
-              <h2 className="text-lg">{item.name}</h2>
-              <p>Category: {item.category}</p>
-              <p>Price: ${item.price}</p>
-            </div>
-          ))}
+          {menuToShow?.map((data) => {
+            const { _id, foodName, price, categoryName, imageURL } = data;
+            return (
+              <div
+                key={_id}
+                style={{ margin: "20px" }}
+                className="w-1/2 md:w-1/3 xl:w-1/4 p-4 border text-center"
+              >
+                <img
+                  src={imageURL}
+                  alt={foodName}
+                  className="w-full h-auto mb-4"
+                />
+                <h2 className="text-lg">{foodName}</h2>
+                <p>Category: {categoryName}</p>
+                <p>Price: bdt {price}</p>
+              </div>
+            );
+          })}
+
+          {menuToShow.length < 1 && (
+            <p>No {selectedCategory} food is available now</p>
+          )}
         </div>
       </div>
       <FooterPage />
