@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import FooterPage from "../components/Footer/FooterPage";
 import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -61,7 +60,7 @@ export const LoginPage = () => {
     <section className="bg-white min-h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8 text-black">
             <h1 className="text-xl font-bold text-center leading-tight tracking-tight  md:text-2xl">
               Sign in to your account
             </h1>
@@ -73,7 +72,7 @@ export const LoginPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Your email
                 </label>
@@ -91,7 +90,7 @@ export const LoginPage = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Password
                 </label>
@@ -131,7 +130,6 @@ export const LoginPage = () => {
           </div>
         </div>
       </div>
-      <FooterPage />
     </section>
   );
 };

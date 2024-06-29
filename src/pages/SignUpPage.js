@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import FooterPage from "../components/Footer/FooterPage";
 import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import toast from "react-hot-toast";
@@ -70,14 +69,14 @@ const SignUpPage = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold text-center leading-tight tracking-tight  md:text-2xl">
+            <h1 className="text-xl text-black font-bold text-center leading-tight tracking-tight  md:text-2xl">
               Create an account
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Your name
                 </label>
@@ -95,7 +94,7 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Your email
                 </label>
@@ -113,7 +112,7 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Password
                 </label>
@@ -131,7 +130,7 @@ const SignUpPage = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Confirm password
                 </label>
@@ -147,7 +146,7 @@ const SignUpPage = () => {
                 />
               </div>
 
-              <label className="mb-2 text-sm font-medium text-red-600 dark:text-white">
+              <label className="mb-2 text-sm font-medium text-red-600">
                 {pageError}
               </label>
 
@@ -171,7 +170,6 @@ const SignUpPage = () => {
           </div>
         </div>
       </div>
-      <FooterPage />
     </section>
   );
 };

@@ -6,7 +6,7 @@ const FooterPage = () => {
   const currentYear = 2024;
   return (
     <footer>
-      <div className="flex flex-col justify-center items-center p-10 bg-[#474747]">
+      <div className="flex flex-col justify-center items-center text-center p-10 bg-[#474747]">
         <div>
           <img src={logo}></img>
           <p className=" pt-2">In the new era of technology we look a in the future with certainty and pride to for our company and.</p>

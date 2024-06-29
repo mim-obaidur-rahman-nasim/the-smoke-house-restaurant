@@ -6,7 +6,6 @@ import menu2 from "../assets/images/menu2.svg";
 import menu3 from "../assets/images/menu3.svg";
 import menu4 from "../assets/images/menu4.svg";
 import content from "../assets/images/Content(1).svg";
-import FooterPage from "../components/Footer/FooterPage";
 
 const menuItems = [
   {
@@ -47,30 +46,30 @@ function HomePage() {
           alignItems: "center",
         }}
       >
-        <div className="flex flex-col justify-center items-center w-full px-3 md:px-16 lg:px-32 py-32">
-          <h1 className=" font-normal text-8xl text-center">
+        <div className="flex flex-col justify-center items-center w-full text-black  px-3 md:px-16 lg:px-32 py-32">
+          <h1 className=" font-normal text-4xl lg:text-8xl text-center">
             Best food for
             <br /> your taste
           </h1>
-          <p className=" font-normal text-[32px] text-center pt-8">
+          <p className=" font-normal lg:text-[32px] text-center pt-8">
             Discover delectable cuisine and unforgettable moments in our
             welcoming, culinary haven.
           </p>
           <div className=" flex gap-4 pt-10">
-            <button className=" text-base font-bold bg-[#AD343E] p-4 rounded-full">
+            <button className=" text-base text-white font-bold bg-[#AD343E] p-2 lg:p-4 rounded-full">
               Book a Table
             </button>
-            <button className=" text-base font-bold p-4 rounded-full border border-black">
+            <button className=" text-base font-bold p-2 lg:p-4 rounded-full border border-black">
               Explore Menu
             </button>
           </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center py-10 md:py-20 lg:py-30">
-        <h1 className="font-medium text-5xl text-center md:text-6xl lg:text-7xl">
+      <div className="flex flex-col justify-center items-center py-10 sm:py-10 md:py-20 lg:py-30">
+        <h1 className="font-medium text-center text-3xl md:text-6xl lg:text-7xl">
           Browse Our Menu
         </h1>
-        <div className="flex flex-wrap justify-center items-center px-2 md:px-10 lg:px-20 gap-5 pt-10">
+        <div className="flex flex-wrap justify-center items-center px-4 md:px-10 lg:px-20 gap-5 pt-10">
           {menuItems.map((menuItem, index) => (
             <div
               key={index}
@@ -78,7 +77,7 @@ function HomePage() {
             >
               <img
                 src={menuItem.image}
-                className="w-full h-full object-cover rounded-t-2xl"
+                className=" sm:w-1/3 object-cover rounded-t-2xl"
               />
               <h2 className="text-lg font-semibold pt-5 pb-3 md:pt-10 md:pb-5">
                 {menuItem.title}
@@ -91,7 +90,7 @@ function HomePage() {
           ))}
         </div>
       </div>
-      <div className="flex justify-center items-center p-8">
+      <div className="flex justify-center items-center p-2">
         <img src={content}></img>
       </div>
     </div>
