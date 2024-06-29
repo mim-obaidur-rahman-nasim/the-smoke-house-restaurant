@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import FooterPage from "../components/Footer/FooterPage";
 import axios from "axios";
 import Loading from "./shared/Loading";
 import Error from "./shared/Error";
+import useAuth from "../hooks/useAuth";
+import { BsBagCheck } from "react-icons/bs";
 
 const MenuPage = () => {
+  const { addToCart } = useAuth();
+
   const [menu, setMenu] = useState([]);
   const [menuToShow, setMenuToShow] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -121,9 +124,17 @@ const MenuPage = () => {
               <div className="px-4 py-4">
                 <h2 className="text-xl font-bold">{foodName}</h2>
                 <p className="text-sm -tracking-wider">{categoryName}</p>
-                <p className="mt-2">
-                  <span className="font-bold text-sm">Price:</span> bdt {price}
-                </p>
+                <div className="mt-2 flex flex-row justify-between">
+                  <p>
+                    <span className="font-bold text-sm">Price:</span> bdt{" "}
+                    {price}
+                  </p>
+                  <BsBagCheck
+                    onClick={() => addToCart(data)}
+                    size={24}
+                    className="cursor-pointer"
+                  />
+                </div>
               </div>
             </div>
           );

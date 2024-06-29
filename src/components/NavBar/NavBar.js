@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Logo from "../shared/Logo";
+import { BsBagCheck } from "react-icons/bs";
 
 const Navbar = () => {
   const { isAuthenticated, role, logout } = useAuth();
@@ -61,6 +62,26 @@ const Navbar = () => {
                   </NavLink>
                 </li>
               )}
+              {role === "USER" && (
+                <li>
+                  <NavLink
+                    to="/profile"
+                    activeClassName="active"
+                    className="nav-link cursor-pointer"
+                  >
+                    Profile
+                  </NavLink>
+                </li>
+              )}
+              <li>
+                <NavLink
+                  to="/contact"
+                  activeClassName="active"
+                  className="nav-link cursor-pointer"
+                >
+                  Contact
+                </NavLink>
+              </li>
               {isAuthenticated ? (
                 <li>
                   <button onClick={logout} className="nav-link cursor-pointer">
@@ -113,6 +134,26 @@ const Navbar = () => {
                 </NavLink>
               </li>
             )}
+            {role === "USER" && (
+              <li>
+                <NavLink
+                  to="/profile"
+                  activeClassName="active"
+                  className="nav-link cursor-pointer"
+                >
+                  Profile
+                </NavLink>
+              </li>
+            )}
+            <li>
+              <NavLink
+                to="/contact"
+                activeClassName="active"
+                className="nav-link cursor-pointer"
+              >
+                Contact
+              </NavLink>
+            </li>
             {isAuthenticated ? (
               <li>
                 <button onClick={logout} className="nav-link cursor-pointer">
@@ -132,7 +173,12 @@ const Navbar = () => {
             )}
           </ul>
         </div>
-        <div className="navbar-end">
+        <div className="navbar-end gap-4">
+          <Link to="cart">
+            {" "}
+            <BsBagCheck size={24} />
+          </Link>
+
           <NavLink
             to="/book-now"
             activeClassName="active"
