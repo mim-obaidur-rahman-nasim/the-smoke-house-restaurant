@@ -13,6 +13,7 @@ import AddMenu from "../pages/dashboard/AddMenu";
 import Category from "../pages/dashboard/Category";
 import AddCategory from "../pages/dashboard/AddCategory";
 import UpdateCategory from "../pages/dashboard/UpdateCategory";
+import UpdateMenu from "../pages/dashboard/UpdateMenu";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
       {
         path: "add-menu",
         element: <AddMenu />,
+      },
+      {
+        path: "menu/:id",
+        element: <UpdateMenu />,
       },
       {
         path: "categories",

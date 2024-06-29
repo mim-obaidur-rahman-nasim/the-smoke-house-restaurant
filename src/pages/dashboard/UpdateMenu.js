@@ -1,14 +1,39 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { toBase64 } from "../../utils/ConvertImage";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import { toBase64 } from "../../utils/ConvertImage";
 
-const AddMenu = () => {
-  const [categories, setCategories] = useState([]);
-  const [pageLoading, setPageLoading] = useState(true);
+const UpdateMenu = () => {
+  const { id } = useParams();
+
+  const [pageLoading, setPageLoading] = useState(false);
   const [pageError, setPageError] = useState("");
 
+  const [menu, setMenu] = useState({});
+  const [categories, setCategories] = useState([]);
+
   useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/menu/one?menuId=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setMenu(response?.data?.data);
+      } catch (error) {
+        setPageError(error?.response?.data?.message || "Server error");
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
     const fetchCategories = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -30,10 +55,16 @@ const AddMenu = () => {
       }
     };
 
+    fetchMenu();
     fetchCategories();
-  }, []);
+  }, id);
 
-  const handleAddNewMenu = async (e) => {
+  const findCategoryName = (id) => {
+    const desireOne = categories.find((data) => data._id == id);
+    return desireOne?.categoryName;
+  };
+
+  const handleUpdateMenu = async (e) => {
     e.preventDefault();
 
     const foodName = e.target.foodName.value;
@@ -41,16 +72,29 @@ const AddMenu = () => {
     const price = parseFloat(e.target.price.value);
     const imageURL = e.target.imageURL.files[0];
 
-    const data = {
-      foodName,
-      categoryId,
-      price,
-    };
+    const data = {};
 
-    try {
-      data.imageURL = await toBase64(imageURL);
-    } catch (error) {
-      setPageError("An error occurred while converting the image");
+    if (foodName && foodName !== menu.foodName) {
+      data.foodName = foodName;
+    }
+    if (categoryId && categoryId !== menu.categoryId) {
+      data.categoryId = categoryId;
+    }
+    if (price && price !== menu.price) {
+      data.price = price;
+    }
+
+    if (imageURL) {
+      try {
+        data.imageURL = await toBase64(imageURL);
+      } catch (error) {
+        setPageError("An error occurred while converting the image");
+        return;
+      }
+    }
+
+    if (Object.keys(data).length === 0) {
+      setPageError("There is no changes in your course information");
       return;
     }
 
@@ -60,8 +104,8 @@ const AddMenu = () => {
 
       const token = localStorage.getItem("token");
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/menu/add`,
+      const response = await axios.patch(
+        `${process.env.REACT_APP_SERVER}/api/menu/update?menuId=${id}`,
         data,
         {
           headers: {
@@ -69,8 +113,8 @@ const AddMenu = () => {
           },
         }
       );
-      e.target.reset();
-      toast.success(response?.data?.message || "Menu added successfully");
+      setMenu(response?.data?.data);
+      toast.success(response?.data?.message || "Menu updated successfully");
     } catch (error) {
       setPageError(error?.response?.data?.message || "Server error");
     } finally {
@@ -80,9 +124,9 @@ const AddMenu = () => {
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="card w-full max-w-md border bg-white border-gray-300 py-4">
-        <h1 className="text-center pt-2 text-xl font-bold">Add Menu</h1>
+        <h1 className="text-center pt-2 text-xl font-bold">Update Menu</h1>
         <div className="card-body">
-          <form onSubmit={handleAddNewMenu}>
+          <form onSubmit={handleUpdateMenu}>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Food Name</span>
@@ -92,6 +136,7 @@ const AddMenu = () => {
                 name="foodName"
                 placeholder="Food name"
                 className="input input-bordered"
+                defaultValue={menu.foodName}
                 required
               />
             </div>
@@ -105,8 +150,8 @@ const AddMenu = () => {
                 className="select select-bordered w-full"
                 required
               >
-                <option value="" disabled selected>
-                  Select related category
+                <option value={menu.categoryId} disabled selected>
+                  {findCategoryName(menu.categoryId)}
                 </option>
 
                 {categories?.map((data) => {
@@ -125,6 +170,7 @@ const AddMenu = () => {
                 name="price"
                 placeholder="Food price"
                 className="input input-bordered"
+                defaultValue={menu.price}
                 required
               />
             </div>
@@ -136,8 +182,17 @@ const AddMenu = () => {
                 type="file"
                 name="imageURL"
                 className="mt-2 rounded-md max-h-48"
-                required
               />
+              {menu.imageURL && (
+                <div className="md:flex-1 mt-2 md:mt-0">
+                  <span className="label-text">Current Image:</span>
+                  <img
+                    src={menu.imageURL}
+                    alt="Current blog cover"
+                    className="mt-2 rounded-md max-h-48"
+                  />
+                </div>
+              )}
               {pageError && (
                 <label className="label">
                   <p className="label-text-alt text-red-600">{pageError}</p>
@@ -151,7 +206,7 @@ const AddMenu = () => {
                 className="btn btn-neutral text-sm"
                 disabled={pageLoading}
               >
-                {pageLoading ? "Adding..." : "Add Menu"}
+                {pageLoading ? "Updating..." : "Update Menu"}
               </button>
             </div>
           </form>
@@ -161,4 +216,4 @@ const AddMenu = () => {
   );
 };
 
-export default AddMenu;
+export default UpdateMenu;
