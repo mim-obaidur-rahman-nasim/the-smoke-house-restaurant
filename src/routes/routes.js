@@ -14,6 +14,16 @@ import Category from "../pages/dashboard/Category";
 import AddCategory from "../pages/dashboard/AddCategory";
 import UpdateCategory from "../pages/dashboard/UpdateCategory";
 import UpdateMenu from "../pages/dashboard/UpdateMenu";
+import AllReservation from "../pages/dashboard/AllReservation";
+import UpcomingReservation from "../pages/dashboard/UpcomingReservation";
+import Cart from "../pages/Cart";
+import Success from "../pages/payment/Success";
+import Cancel from "../pages/payment/Cancel";
+import Fail from "../pages/payment/Fail";
+import ProfileLayout from "../layouts/ProfileLayout";
+import History from "../pages/profile/History";
+import ChangePassword from "../pages/profile/ChangePassword";
+import Contact from "../pages/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +54,26 @@ export const router = createBrowserRouter([
       {
         path: "signup",
         element: <SignUpPage />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
+      },
+      {
+        path: "payment/success",
+        element: <Success />,
+      },
+      {
+        path: "payment/cancel",
+        element: <Cancel />,
+      },
+      {
+        path: "payment/fail",
+        element: <Fail />,
+      },
+      {
+        path: "contact",
+        element: <Contact />,
       },
     ],
   },
@@ -79,6 +109,33 @@ export const router = createBrowserRouter([
       {
         path: "categories/:id",
         element: <UpdateCategory />,
+      },
+      {
+        path: "all-reservation",
+        element: <AllReservation />,
+      },
+      {
+        path: "upcoming-reservation",
+        element: <UpcomingReservation />,
+      },
+    ],
+  },
+  {
+    path: "profile",
+    element: <ProfileLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Navigate to="history" />,
+      },
+      {
+        path: "history",
+        element: <History />,
+      },
+      {
+        path: "change-password",
+        element: <ChangePassword />,
       },
     ],
   },

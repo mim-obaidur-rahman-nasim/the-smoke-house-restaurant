@@ -13,16 +13,8 @@ const Menu = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const token = localStorage.getItem("token");
-
         const response = await axios.get(
-          `${process.env.REACT_APP_SERVER}/api/menu/all`,
-
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `${process.env.REACT_APP_SERVER}/api/menu/all`
         );
         setMenu(response?.data?.data);
       } catch (error) {

@@ -10,6 +10,8 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState(null);
+  const [cart, setCart] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   const getRole = async (_token) => {
@@ -39,6 +41,8 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {}, []);
+
   const login = async (token) => {
     setLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -56,12 +60,44 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   };
 
+  const addToCart = (data) => {
+    if (!cart.some((item) => item._id === data._id)) {
+      const newCart = [...cart, data];
+      setCart(newCart);
+      localStorage.setItem("cart", JSON.stringify(newCart));
+    } else {
+      toast.error("Item already in cart.");
+    }
+  };
+
+  const removeFromCart = (id) => {
+    const newCart = cart.filter((item) => item._id !== id);
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+  };
+
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+  }, []);
+
   if (loading) {
     return <Loading />;
   }
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, loading, login, logout, role }}
+      value={{
+        isAuthenticated,
+        loading,
+        login,
+        logout,
+        role,
+        addToCart,
+        removeFromCart,
+        cart,
+      }}
     >
       {children}
     </AuthContext.Provider>

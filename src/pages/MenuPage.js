@@ -1,171 +1,150 @@
 import React, { useState, useEffect } from "react";
-
+import axios from "axios";
+import Loading from "./shared/Loading";
+import Error from "./shared/Error";
+import useAuth from "../hooks/useAuth";
+import { BsBagCheck } from "react-icons/bs";
 
 const MenuPage = () => {
-  const [menuItems, setMenuItems] = useState([]);
+  const { addToCart } = useAuth();
+
+  const [menu, setMenu] = useState([]);
+  const [menuToShow, setMenuToShow] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [pageError, setPageError] = useState("");
+
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    const mockData = [
-      {
-        id: 1,
-        name: "Pancakes",
-        category: "Breakfast",
-        price: 9.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 2,
-        name: "Burger",
-        category: "Main Dishes",
-        price: 12.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 3,
-        name: "Coke",
-        category: "Drinks",
-        price: 2.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 4,
-        name: "Cheesecake",
-        category: "Desserts",
-        price: 6.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 5,
-        name: "Coffee",
-        category: "Drinks",
-        price: 3.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 6,
-        name: "Scrambled Eggs",
-        category: "Breakfast",
-        price: 8.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 7,
-        name: "Salad",
-        category: "Main Dishes",
-        price: 11.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-      {
-        id: 8,
-        name: "Ice Cream",
-        category: "Desserts",
-        price: 5.99,
-        image:
-          "https://handletheheat.com/wp-content/uploads/2019/02/The-Best-Pancake-Recipe-SQUARE.jpg",
-      },
-    ];
+    const fetchMenu = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/menu/all`
+        );
+        setMenu(response?.data?.data);
+        setMenuToShow(response?.data?.data);
+      } catch (error) {
+        setPageError(error?.response?.data?.message || "Server error");
+      } finally {
+        setPageLoading(false);
+      }
+    };
 
-    setMenuItems(mockData);
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SERVER}/api/category/all`
+        );
+        setCategories(response?.data?.data);
+      } catch (error) {
+        setPageError(error?.response?.data?.message || "Server error");
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    fetchMenu();
+
+    fetchCategories();
   }, []);
 
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-  };
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setMenuToShow(menu);
+    } else {
+      const filterResult = menu.filter(
+        (data) => data.categoryName === selectedCategory
+      );
+      setMenuToShow(filterResult);
+    }
+  }, [selectedCategory, menu]);
 
-  const filteredMenuItems =
-    selectedCategory === "All"
-      ? menuItems
-      : menuItems.filter((item) => item.category === selectedCategory);
+  if (pageLoading) {
+    return <Loading />;
+  }
+
+  if (!pageLoading && menu.length < 1) {
+    return <Error message="No menu found" />;
+  }
 
   return (
-    <div>
-      <div className="flex flex-col min-h-screen justify-center text-center items-center pt-8 px-10">
-        <div>
-          <h1 className="font-medium text-4xl lg:text-[100px] text-center pb-8">Our Menu</h1>
-          <p>
-            We consider all the drivers of change gives you the components you
-            need to change to create a truly happens.
-          </p>
-        </div>
-        <div class="flex flex-wrap justify-center pt-5 gap-4">
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "All"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("All")}
-  >
-    All
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Breakfast"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Breakfast")}
-  >
-    Breakfast
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Main Dishes"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Main Dishes")}
-  >
-    Main Dishes
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Drinks"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Drinks")}
-  >
-    Drinks
-  </button>
-  <button
-    class={`px-4 py-2 border rounded-full ${
-      selectedCategory === "Desserts"
-        ? "bg-[#AD343E] text-white"
-        : "bg-white text-[#AD343E]"
-    } sm:w-1/2 md:w-auto lg:mx-4`}
-    onClick={() => handleCategoryClick("Desserts")}
-  >
-    Desserts
-  </button>
-</div>
-        <div className="flex flex-wrap justify-center pt-10 pb-10">
-          {filteredMenuItems.map((item) => (
-            <div
-              key={item.id}
-              style={{ margin: "20px" }}
-              className="w-1/2 md:w-1/3 xl:w-1/4 p-4 border rounded-lg text-center"
-            >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-auto mb-4"
-              />
-              <h2 className="text-lg">{item.name}</h2>
-              <p>Category: {item.category}</p>
-              <p>Price: ${item.price}</p>
-            </div>
-          ))}
-        </div>
+    <div className="min-h-screen container mx-auto pt-6 pb-12">
+      <div className="flex flex-col justify-center items-center gap-4">
+        <h1 className="font-bold text-4xl text-center ">Our Menu</h1>
+        <p className="text-gray-500 text-sm px-12">
+          We consider all the drivers of change gives you the components you
+          need to change to create a truly happens.
+        </p>
       </div>
+      <div className="flex justify-center pt-5 gap-1 overflow-x-scroll text-sm">
+        <button
+          onClick={() => setSelectedCategory("All")}
+          className={`px-4 py-2 border rounded-full ${
+            selectedCategory === "All"
+              ? "bg-[#AD343E] text-white"
+              : "bg-white text-[#AD343E]"
+          } sm:w-1/2 md:w-auto lg:mx-4`}
+        >
+          All
+        </button>
+        {categories?.map((data) => {
+          const { _id, categoryName } = data;
+          return (
+            <button
+              key={_id}
+              onClick={() => setSelectedCategory(categoryName)}
+              className={`px-4 py-2 border rounded-full ${
+                selectedCategory === categoryName
+                  ? "bg-[#AD343E] text-white"
+                  : "bg-white text-[#AD343E]"
+              } sm:w-1/2 md:w-auto lg:mx-4`}
+            >
+              {categoryName}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8 px-4">
+        {menuToShow?.map((data) => {
+          const { _id, foodName, price, categoryName, imageURL } = data;
+          return (
+            <div
+              key={_id}
+              className="border border-gray-300 rounded-2xl flex flex-col"
+            >
+              <div className="relative h-0" style={{ paddingTop: "133.33%" }}>
+                <img
+                  src={imageURL}
+                  alt={foodName}
+                  className="absolute inset-0 w-full h-full object-cover rounded-t-2xl"
+                />
+              </div>
+              <div className="px-4 py-4">
+                <h2 className="text-xl font-bold">{foodName}</h2>
+                <p className="text-sm -tracking-wider">{categoryName}</p>
+                <div className="mt-2 flex flex-row justify-between">
+                  <p>
+                    <span className="font-bold text-sm">Price:</span> bdt{" "}
+                    {price}
+                  </p>
+                  <BsBagCheck
+                    onClick={() => addToCart(data)}
+                    size={24}
+                    className="cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {menuToShow.length < 1 && (
+        <div className="text-center">
+          <p>No {selectedCategory} food is available now</p>
+        </div>
+      )}
     </div>
   );
 };

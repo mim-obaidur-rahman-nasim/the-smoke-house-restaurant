@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { toBase64 } from "../../utils/ConvertImage";
 
 const AddCategory = () => {
   const [pageLoading, setPageLoading] = useState(false);
@@ -10,6 +11,20 @@ const AddCategory = () => {
     e.preventDefault();
 
     const categoryName = e.target.categoryName.value;
+    const description = e.target.description.value;
+    const icon = e.target.icon.files[0];
+
+    const data = {
+      categoryName,
+      description,
+    };
+    try {
+      data.icon = await toBase64(icon);
+    } catch (error) {
+      setPageError("An error occurred while converting the image");
+      return;
+    }
+
     try {
       setPageLoading(true);
 
@@ -17,7 +32,7 @@ const AddCategory = () => {
 
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER}/api/category/add`,
-        { categoryName },
+        data,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,6 +62,29 @@ const AddCategory = () => {
                 name="categoryName"
                 placeholder="Category Name"
                 className="input input-bordered"
+                required
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Description</span>
+              </label>
+              <input
+                type="text"
+                name="description"
+                placeholder="Category description"
+                className="input input-bordered"
+                required
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Icon</span>
+              </label>
+              <input
+                type="file"
+                name="icon"
+                className="mt-2 rounded-md max-h-48"
                 required
               />
               {pageError && (

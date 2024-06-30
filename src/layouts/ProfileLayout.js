@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-const DashboardLayout = () => {
+const ProfileLayout = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -34,22 +34,10 @@ const DashboardLayout = () => {
               <Link to={"/"}>Home</Link>
             </li>
             <li>
-              <Link to="menu">Menu</Link>
+              <Link to="history">Purchase History</Link>
             </li>
             <li>
-              <Link to="add-menu">Add Menu</Link>
-            </li>
-            <li>
-              <Link to="categories">Categories</Link>
-            </li>
-            <li>
-              <Link to="add-category">Add Category</Link>
-            </li>
-            <li>
-              <Link to="all-reservation">All Reservation</Link>
-            </li>
-            <li>
-              <Link to="upcoming-reservation">Upcoming Reservation</Link>
+              <Link to="change-password">Change Password</Link>
             </li>
           </div>
           <div>
@@ -68,4 +56,4 @@ const DashboardLayout = () => {
   );
 };
 
-export default DashboardLayout;
+export default ProfileLayout;
